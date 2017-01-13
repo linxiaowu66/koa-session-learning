@@ -1,0 +1,129 @@
+.g-header{
+  position: fixed;
+  width:100%;
+  left:0;
+  top:0;
+  background-color: #252b33;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.35);
+  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.35);
+  box-shadow: 0 1px 2px rgba(0,0,0,.35);
+  z-index: 100;
+  zoom: 1;
+  height:35px;
+}
+.g-header-icon{
+  display:block;
+  height:35px;
+  line-height: 35px;
+  font-size:14px;
+  color:#fff;
+  padding-left:20px;
+}
+
+.g-header-user{
+  position: absolute;
+  top: 0;
+  right:10px;
+}
+.pull-right{
+  float: right;
+}
+.g-header-img{
+  height: 100%;
+  border-radius: 17px;
+}
+.g-header-name{
+  font-size: 1.5em;
+  color: #FFF;
+  margin: 0 10px;
+  line-height: 35px;
+}
+.g-header-block{
+  width: 70px;
+  height: 35px;
+  display: inline-block;
+  background: #21a9e1;
+  cursor: pointer;
+  text-align: center;
+  line-height: 35px;
+  text-decoration: none;
+  color: #99dbf6;
+  margin-left: 10px;
+}
+
+.g-layout{
+  display:flex;
+}
+.g-layout-left{
+  flex:0 0 auto;
+  background: #2c2e2f;
+  width:80px;
+  overflow: hidden;
+  transition:width .3s ease-in-out 0s;
+}
+.g-layout-left-close{
+  width:0;
+}
+.g-layout-right{
+  flex:1 1 100px;
+  min-height:calc(100% - 35px);
+}
+.g-layout-brand{
+  text-align:center;
+  height:80px;
+  line-height: 80px;
+  width:80px;
+  color:#fff;
+  font-size:25px;
+  border-bottom: 1px solid #313437;
+}
+.g-layout-link > a{
+  display: block;
+  height: 50px;
+  width:80px;
+  line-height: 50px;
+  text-align: center;
+  border-bottom: 1px solid #313437;
+  color: #979898;
+  text-decoration: none;
+}
+.g-layout-link > .router-link-active{
+  background-color:#252627;
+  color:#fff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3) inset
+}
+.g-layout-link > a:hover{
+  background-color:#252627;
+  color:#fff;
+}
+.g-layout-crumb{
+  height:50px;
+  box-shadow: 0 1px 0 rgba(0,1,1,.08), inset 0 1px 0 #ededed;
+  background-color:#f8f8f8;
+  line-height: 50px;
+  position:relative;
+  z-index:10;
+}
+.g-layout-crumb > span{
+  font-size:14px;
+  color:#979898;
+}
+.g-layout-crumb-split{
+  font-size:12px;
+  margin:0 5px;
+  color:#979898;
+}
+.g-layout-crumb-icon{
+  margin:0 10px;
+  cursor: pointer;
+  font-family: sans-serif;
+  font-size: 15px;
+  position: relative;
+  top: 7px;
+}
+.g-layout-code-icon{
+  position:absolute;
+  right:10px;
+  top:auto;
+  color:#979898;
+}

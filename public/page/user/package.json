@@ -1,0 +1,5 @@
+{
+  "name":"vue-user",
+  "desc":"用户管理",
+  "main":"user.js"
+}

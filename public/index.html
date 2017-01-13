@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>session学习demo</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  </head>
+  <body>
+    <div id="app">
+      <div class="g-header">
+        <span class="g-header-icon">Session学习demo</span>
+        <div class="g-header-user" v-if="username === ''">
+          <router-link class="g-header-block" to="/user/register">注册</router-link>
+          <router-link class="g-header-block" to="/user/login">登录</router-link>
+        </div>
+        <div class="g-header-user" v-else>
+          <img v-bind:src="avatar" class="g-header-img"/>
+          <a class="g-header-block pull-right" @click="logout">退出</a>
+          <span class="g-header-name pull-right">{{ username }}</span>
+        </div>
+      </div>
+      <div class="g-layout">
+        <div class="g-layout-left" v-bind:class="{'g-layout-left-close':close}">
+          <div class="g-layout-brand">TM</div>
+          <div class="g-layout-link">
+          </div>
+        </div>
+        <div class="g-layout-right">
+          <div class="g-layout-crumb">
+            <i class="g-layout-crumb-icon">
+              <mu-icon v-on:click="toggle" value="reorder"></mu-icon>
+            </i>
+            <span>首页</span>
+            <i class="g-layout-crumb-split">/</i>
+            <template v-for="item in crumb">
+              <span>{{item}}</span>
+              <i class="g-layout-crumb-split">/</i>
+            </template>
+          </div>
+          <div class="g-layout-content">
+            <router-view v-on:login="processLogin"></router-view>
+          </div>
+        </div>
+      </div>
+      <mu-snackbar v-if="snackbar" v-bind:message="message" />
+    </div>
+  </body>
+</html>
