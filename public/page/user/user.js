@@ -15,7 +15,7 @@ export default Vue.extend({
   methods:{
     loginSubmit: function(){
       let request=reqwest({
-        url: '/login',
+        url: '/auth',
         method: 'POST',
         data: {username: this.username,
                password: this.password}
@@ -36,7 +36,7 @@ export default Vue.extend({
     registerSubmit: function(){
 
       let request=reqwest({
-        url: '/register',
+        url: '/users/register',
         method: 'POST',
         data: {username: this.username,
                password: this.password}

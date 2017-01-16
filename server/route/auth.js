@@ -1,22 +1,23 @@
+import * as auth from '../controller/auth'
 import { ensureUser } from '../middleware/validators'
-import * as user from '../controller/user'
 
-export const baseUrl = '/users'
+export const baseUrl = '/auth'
 
 export default [
   {
     method: 'POST',
-    route: '/register',
+    route: '/',
     handlers: [
-      user.createUser
+      auth.authUser
     ]
   },
   {
-    method: 'GET',
-    route: '/',
+    method: 'POST',
+    route: '/logout',
     handlers: [
       ensureUser,
-      user.getUsers
+      auth.authUser
     ]
   }
 ]
+

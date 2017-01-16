@@ -1,61 +1,75 @@
-var bcrypt = require('../common/bcrypt_promise.js'); // version that supports yields
-var mongoose = require('mongoose');
-var co = require('co');
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
 
-const SALT_WORK_FACTOR = 10;
+const SALT_WORK_FACTOR = 10
 
-var UserSchema = mongoose.Schema({
+var User = mongoose.Schema({
   username: { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
   avatar: { type: String, required: true }
-});
+})
 
-UserSchema.pre('save', function (done) {
+User.pre('save', function preSave (next) {
+  const user = this
+
   // only hash the password if it has been modified (or is new)
-  if (!this.isModified('password')) {
-    return done();
+  if (!user.isModified('password')) {
+    return next()
   }
 
-  bcrypt.genSalt()
-   .then( salt => bcrypt.hash(this.password, salt))
-   .then( hash => {
-      this.password = hash;
-      done();
+  new Promise((resolve, reject) => {
+    bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
+      if (err) { return reject(err) }
+      resolve(salt)
     })
-   .catch(err => {
-    console.error(err);
-    done(err);
-   })
+  })
+  .then(salt => {
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) { throw new Error(err) }
 
-});
+      user.password = hash
 
-UserSchema.methods.comparePassword = function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
+      next(null)
+    })
+  })
+  .catch(err => next(err))
 
-UserSchema.statics.matchUser = function *(username, password) {
-  try{
-    var user = yield this.findOne({ 'username': username.toLowerCase() }).exec();
-  } catch (err){
-    console.error('Database operation failure, error: ', err);
-    throw new Error('数据库操作失败');
-  }
+})
 
-  if (!user) return {user: null, message: '没有找到该用户'};
+User.methods.validatePassword = function validatePassword (password) {
+  const user = this
 
-  try{
-    if (yield user.comparePassword(password))
-      return {user: user, message: ''};
-  } catch (err){
-    console.error('password compare failure, error: ', err);
-    throw new Error('数据库比对失败');
-  }
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) { return reject(err) }
 
-  return {user: null, message: '用户名和密码不匹配'};
-};
+      resolve(isMatch)
+    })
+  })
+}
 
-var name="user";
+User.methods.generateToken = function generateToken () {
+  const user = this
+
+  return jwt.sign({ id: user.id }, config.token)
+}
+
+const user = mongoose.model('user', User);
+
 
 module.exports={
-  [name]:mongoose.model(name, UserSchema)
+  create: function(params){
+    const instance = new user(params);
+    return instance.save();
+  },
+  findAll: function () {
+    return user.find({}, '-password')
+  },
+  findById: function (id) {
+    if (!id) {
+      return Promise.reject('缺少参数');
+    }
+    return user.findById(id, '-password')
+  }
 };

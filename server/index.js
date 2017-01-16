@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import url from 'url'
-import koa from 'koa'
 import koa_body from 'koa-body'
 import validator from 'koa-validator'
 import koa_logger from 'koa-logger2'
@@ -9,16 +8,26 @@ import favicon from 'koa-favicon'
 import session from 'koa-generic-session'
 import passport from 'koa-passport'
 import Koa from 'koa'
-import router from './route'
-import config from './config'
-import http from 'http'
-import httpProxy from 'http-proxy'
 import convert  from 'koa-convert'
+import mount from 'koa-mount'
+import serve from 'koa-static'
+import mongoose from 'mongoose'
+import { errorMiddleware } from './middleware'
+import webpackDevMiddleware from './middleware/webpack-dev'
+import router from './route'
+import config from '../config'
 
 const app = new Koa()
-const port = 9999
 const cwd = process.cwd();
-// app.use(favicon(__dirname + '/../public/favicon.ico'));
+
+app.use(favicon(__dirname + '/../public/favicon.ico'));
+
+mongoose.Promise = global.Promise
+mongoose.connect(config.database)
+
+if (process.env.NODE_ENV === 'development') {
+  webpackDevMiddleware(app)
+}
 
 //记录日志
 app.use(convert(koa_logger('ip [day/month/year:time zone] "method url " status size duration ms').gen));
@@ -44,6 +53,7 @@ app.use(async (ctx, next) => {
 // 配置session的key
 app.keys = config.keys;
 app.use(convert(session()));
+app.use(errorMiddleware())
 
 //加载第三方中间件
 app.use(convert(validator()));
@@ -52,53 +62,15 @@ app.use(koa_body({
   multipart:true
 }));
 
-require('./common/passport')(passport);
+require('./helpers/passport')
 // 初始化passport,这个必须初始化在router之前
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(router.routes()).use(router.allowedMethods());
+router(app)
 
-var proxy = httpProxy.createProxyServer({});
-var regexp=require('./common/regexp.js');
-var isStatic=regexp.isStatic;
-var isImage=regexp.isImage;
-var isHotUpdate=regexp.isHotUpdate;
-var responseRes=require('./common/responseStatic.js');
+app.use(convert(mount('/dist', serve(`${process.cwd()}/dist`))))
 
-app.use(async (ctx, next) => {
-  if (ctx.isAuthenticated()) {
-    await next
-  } else {
-    ctx.redirect('/login');
-  }
-})
-
-var server = http.createServer(function(req, res) {
-  var url = req.url;
-
-  if(url==='/'){
-    url = 'index.html';
-  }
-  // 若是静态请求
-  if(isStatic.test(url)||isImage.test(url)||isHotUpdate.test(url)){
-    if(config.debug!==undefined){
-      // 线下使用 代理线下解析服务
-      proxy.web(req, res, { target: config.debug });
-    }else{
-      // 线上使用 读取静态文件
-      responseRes(path.join(cwd,'dist',url),res).catch(function(err){
-        res.end('找不到资源');
-      });
-    }
-  }else{
-    // 若是接口请求 用koa解析
-    app.callback()(req, res);
-    app.on('error', function(err){
-      log.error('server error', err);
-    });
-  }
-});
-server.listen(port,()=>{
-  console.log('服务在'+port+'端口上监听');
+app.listen(config.port,()=>{
+  console.log('服务在'+config.port+'端口上监听');
 });

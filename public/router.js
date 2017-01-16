@@ -35,7 +35,7 @@ new Vue({
     },
     logout: function(){
       let request=reqwest({
-        url: '/logout',
+        url: '/auth/logout',
         method: 'POST'
       });
       request.then(result => {

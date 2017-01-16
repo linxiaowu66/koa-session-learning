@@ -24,6 +24,10 @@
   padding-left: 70px;
 }
 
+.user .mu-text-field.has-label{
+  max-height: 72px;
+}
+
 .user-btn{
   font-size: 1.5em;
   position: absolute;

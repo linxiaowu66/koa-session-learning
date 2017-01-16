@@ -1,11 +1,32 @@
-var router = require('koa-router')();
-var list = [
-  require('./user.js')
-];
-var routers = list.reduceRight(($1,$2)=>{return $2.concat($1)},[]);
+import glob from 'glob'
+import Router from 'koa-router'
 
-for(var i=0;i<routers.length;i++){
-  var item=routers[i];
-  router[item.method](item.path, item.handle);
+exports = module.exports = function initModules (app) {
+  glob(`${__dirname}/*`, { ignore: '**/index.js' }, (err, matches) => {
+    if (err) { throw err }
+    matches.forEach((mod) => {
+      const router = require(`${mod}`)
+
+      const routes = router.default
+      const baseUrl = router.baseUrl
+      const instance = new Router({ prefix: baseUrl })
+
+      routes.forEach((config) => {
+        const {
+          method = '',
+          route = '',
+          handlers = []
+        } = config
+        const lastHandler = handlers.pop()
+
+        instance[method.toLowerCase()](route, ...handlers, async function(ctx) {
+          return await lastHandler(ctx)
+        })
+
+        app
+          .use(instance.routes())
+          .use(instance.allowedMethods())
+      })
+    })
+  })
 }
-module.exports=router;
