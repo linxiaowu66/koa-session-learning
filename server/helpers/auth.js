@@ -1,5 +1,6 @@
 export function getToken (ctx) {
   const header = ctx.request.header.authorization
+  console.log(header)
   if (!header) {
     return null
   }

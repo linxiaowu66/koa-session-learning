@@ -1,5 +1,5 @@
 import passport from 'koa-passport'
-import User from '../model/user'
+import * as User from '../model/user'
 import { Strategy } from 'passport-local'
 
 passport.serializeUser((user, done) => {

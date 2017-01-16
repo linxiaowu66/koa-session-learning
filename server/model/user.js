@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
+import config from '../../config'
 
 const SALT_WORK_FACTOR = 10
 
@@ -71,5 +72,11 @@ module.exports={
       return Promise.reject('缺少参数');
     }
     return user.findById(id, '-password')
+  },
+  findOne: function (param) {
+    if (!param) {
+      return Promise.reject('缺少参数');
+    }
+    return user.findOne({username: param.username})
   }
 };
