@@ -15,8 +15,15 @@ export default [
     method: 'GET',
     route: '/',
     handlers: [
-      ensureUser,
+      // ensureUser
       user.getUsers
+    ]
+  },
+  {
+    method: 'delete',
+    route: '/nothing',
+    handlers: [
+      user.getNothing
     ]
   }
 ]

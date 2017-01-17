@@ -65,7 +65,7 @@ module.exports={
     return instance.save();
   },
   findAll: function () {
-    return user.find({}, '-password')
+    return user.find({})
   },
   findById: function (id) {
     if (!id) {

@@ -9,8 +9,8 @@
       <div class="g-header">
         <span class="g-header-icon">Session学习demo</span>
         <div class="g-header-user" v-if="username === ''">
-          <router-link class="g-header-block" to="/user/register">注册</router-link>
-          <router-link class="g-header-block" to="/user/login">登录</router-link>
+          <router-link class="g-header-block" to="/auth/register">注册</router-link>
+          <router-link class="g-header-block" to="/auth/login">登录</router-link>
         </div>
         <div class="g-header-user" v-else>
           <img v-bind:src="avatar" class="g-header-img"/>

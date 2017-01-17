@@ -1,0 +1,26 @@
+<div>
+<mu-table :fixedFooter="true" :allRowsSelected="true" :multiSelectable="true" :enableSelectAll="true">
+  <mu-thead slot="header">
+    <mu-tr>
+      <mu-th>用户名</mu-th>
+      <!-- <mu-th>项目描述</mu-th> -->
+      <mu-th style="width:350px;padding:10px 0;">id</mu-th>
+      <mu-th>用户图片</mu-th>
+    </mu-tr>
+  </mu-thead>
+  <mu-tbody>
+    <mu-tr v-for="(item, index) in Items">
+      <mu-td>
+        <mu-text-field fullWidth v-model="item.username"/>
+      </mu-td>
+      <mu-td style="width:350px;padding:10px 0;">
+        <mu-text-field fullWidth v-model="item._id"/>
+      </mu-td>
+      <mu-td v-if="item.status">
+        <mu-text-field fullWidth v-model="item.avatar"/>
+      </mu-td>
+    </mu-tr>
+  </mu-tbody>
+</mu-table>
+</div>
+

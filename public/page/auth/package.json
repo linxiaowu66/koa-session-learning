@@ -1,0 +1,5 @@
+{
+  "name":"vue-auth",
+  "desc":"用户管理",
+  "main":"auth.js"
+}

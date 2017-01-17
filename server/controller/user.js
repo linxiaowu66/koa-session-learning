@@ -20,7 +20,19 @@ export async function createUser (ctx) {
     }
   }
 }
+
 export async function getUsers (ctx) {
-  const users = await User.findAll()
-  ctx.body = format(null, { users })
+  ctx.body = 'yeyeyeyeyeey'
 }
+
+
+export async function getNothing(ctx) {
+  ctx.body = 'ohohohohoho'
+}
+
+// export async function getUsers (ctx) {
+//   // console.log('------------------------------')
+//   // const users = await User.findAll()
+//   // console.log('------------------------------, ',users)
+//   ctx.body = 'yeyeyeyeyeey'
+// }

@@ -1,5 +1,5 @@
 import passport from 'koa-passport'
-
+import {format} from '../helpers/util'
 
 export async function authUser (ctx, next) {
   return passport.authenticate('local', (user) => {
@@ -8,15 +8,14 @@ export async function authUser (ctx, next) {
     }
 
     const token = user.generateToken()
-
     const response = user.toJSON()
 
     delete response.password
 
-    ctx.body = {
+    ctx.body = format(null, {
       token,
       user: response
-    }
+    })
   })(ctx, next)
 }
 

@@ -16,10 +16,12 @@ Vue.use(MuseUI);
 Vue.use(VueRouter);
 
 // route配置
-import User from './page/user';
+import Auth from './page/auth';
+import User from './page/users'
 
 const routes = [
-  { path: '/user/:action', component: User}
+  { path: '/auth/:action', component: Auth},
+  { path: '/user', component: User}
 ];
 
 const router = new VueRouter({routes});
@@ -30,8 +32,8 @@ new Vue({
       config.close=!config.close;
     },
     processLogin: function(event){
-      this.username = event.result.username;
-      this.avatar = requireContext(`./${event.result.avatar}`)
+      this.username = event.username;
+      this.avatar = requireContext(`./${event.avatar}`)
     },
     logout: function(){
       let request=reqwest({

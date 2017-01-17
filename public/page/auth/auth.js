@@ -1,8 +1,8 @@
 import Vue from 'vue';
-import template from './user.html';
+import template from './auth.html';
 import config from '../../common/global/config.js';
 import reqwest from 'reqwest';
-import "./user.css";
+import "./auth.css";
 
 export default Vue.extend({
   template,
@@ -21,11 +21,14 @@ export default Vue.extend({
                password: this.password}
       });
       request.then(result => {
-        let resp = JSON.parse(result);
+        let resp = JSON.parse(result.response);
+
         if(!resp.status){
           config.showToast('恭喜你，登录成功');
-          this.$emit('login', resp);
-          this.$router.push('/project');
+          // 将token存储在sessionStorage中
+          sessionStorage.setItem('myToken', resp.result.token);
+          this.$emit('login', resp.result.user);
+          this.$router.push('/user');
         }else{
           config.showToast(resp.msg);
         }

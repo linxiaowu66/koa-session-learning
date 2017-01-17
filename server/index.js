@@ -35,6 +35,7 @@ app.use(bodyParser())
 app.use(async (ctx, next) => {
     var start = new Date()
     await next()
+    console.log('return to this......')
     var ms = new Date() - start
     ctx.set('X-Response-Time', ms + 'ms')
 })

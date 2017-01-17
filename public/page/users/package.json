@@ -1,5 +1,5 @@
 {
   "name":"vue-user",
-  "desc":"用户管理",
+  "desc":"用户列表",
   "main":"user.js"
 }
