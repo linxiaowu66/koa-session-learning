@@ -1,5 +1,5 @@
-export function getToken (ctx) {
-  const header = ctx.request.header.authorization
+exports = module.exports = function getToken (req) {
+  const header = req.header.authorization
   console.log(header)
   if (!header) {
     return null

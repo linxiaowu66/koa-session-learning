@@ -1,19 +1,17 @@
-import * as auth from '../controller/auth'
-import { ensureUser } from '../middleware/validators'
+const ensureUser = require('../middleware/validators')
+const auth = require('../controllers/auth')
 
-export const baseUrl = '/auth'
-
-export default [
+exports = module.exports = [
   {
     method: 'POST',
-    route: '/',
+    route: '/auth',
     handlers: [
       auth.authUser
     ]
   },
   {
     method: 'POST',
-    route: '/logout',
+    route: '/auth/logout',
     handlers: [
       ensureUser,
       auth.authUser

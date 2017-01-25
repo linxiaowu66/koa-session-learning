@@ -1,6 +1,6 @@
-import passport from 'koa-passport'
-import * as User from '../model/user'
-import { Strategy } from 'passport-local'
+const passport = require('passport')
+const User = require('../models/user')
+const Strategy = require('passport-local').Strategy
 
 passport.serializeUser((user, done) => {
   done(null, user.id)

@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import mongoose from 'mongoose'
-import config from '../../config'
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
+const config = require('../../config/index')
 
 const SALT_WORK_FACTOR = 10
 

@@ -1,27 +1,27 @@
-import { ensureUser } from '../middleware/validators'
-import * as user from '../controller/user'
+const ensureUser = require('../middleware/validators')
+const user = require('../controllers/user')
 
 export const baseUrl = '/users'
 
-export default [
+exports = module.exports = [
   {
     method: 'POST',
-    route: '/register',
+    route: '/users/register',
     handlers: [
       user.createUser
     ]
   },
   {
     method: 'GET',
-    route: '/',
+    route: '/users',
     handlers: [
-      // ensureUser
+      ensureUser
       user.getUsers
     ]
   },
   {
     method: 'delete',
-    route: '/nothing',
+    route: '/users/nothing',
     handlers: [
       user.getNothing
     ]

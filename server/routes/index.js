@@ -1,15 +1,12 @@
-import glob from 'glob'
-import Router from 'koa-router'
+const glob = require('glob')
+const express = require('express')
+const router = express.Router()
 
 exports = module.exports = function initModules (app) {
   glob(`${__dirname}/*`, { ignore: '**/index.js' }, (err, matches) => {
     if (err) { throw err }
     matches.forEach((mod) => {
-      const router = require(`${mod}`)
-
-      const routes = router.default
-      const baseUrl = router.baseUrl
-      const instance = new Router({ prefix: baseUrl })
+      const routes = require(`${mod}`)
 
       routes.forEach((config) => {
         const {
@@ -19,14 +16,11 @@ exports = module.exports = function initModules (app) {
         } = config
         const lastHandler = handlers.pop()
 
-        instance[method.toLowerCase()](route, ...handlers, async function(ctx) {
-          return await lastHandler(ctx)
+        router[method.toLowerCase()](route, ...handlers, (req, res) => {
+          return lastHandler(req, res)
         })
-
-        app
-          .use(instance.routes())
-          .use(instance.allowedMethods())
       })
     })
+    app.use('/', router)
   })
 }

@@ -1,26 +1,30 @@
-import User from '../model/user'
-import config from '../../config'
-import { getToken } from '../helpers/auth'
-import { verify } from 'jsonwebtoken'
+const User = require('../models/user')
+const config = require('../../config/index.js')
+const getToken = require('../helper/auth')
+const verify = require('jsonwebtoken')
 
-export async function ensureUser (ctx, next) {
-  const token = getToken(ctx)
+exports = module.exports = function ensureUser (req, res, next) {
+  const token = getToken(req)
 
   if (!token) {
-    ctx.throw(401)
+    res.status(401)
   }
 
   let decoded = null
   try {
     decoded = verify(token, config.token)
   } catch (err) {
-    ctx.throw(401)
+    res.status(401)
   }
 
-  ctx.state.user = await User.findById(decoded.id)
-  if (!ctx.state.user) {
-    ctx.throw(401)
-  }
-
-  return next()
+  User.findById(decoded.id).then (user => {
+    if (!user) {
+      res.status(401)
+    } else {
+      return next()
+    }
+  })
+  .catch(err => {
+    console.error('error....ensureUser')
+  })
 }
