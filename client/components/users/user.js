@@ -4,7 +4,7 @@ import config from '../../common/global/config.js';
 // import reqwest from 'reqwest';
 import './user.css';
 
-var request = require('ajax-request')
+// var request = require('ajax-request')
 
 export default Vue.extend({
   template,
@@ -29,11 +29,11 @@ export default Vue.extend({
     // .always(function (resp) {
     //   console.log('aaaaaaa---====', resp)
     // })
-    request('/users/nothing', function (error, response, body) {
-      console.log('---====', response)
-      if (!error && response.statusCode == 200) {
-        console.log(body) // Show the HTML for the Google homepage.
-      }
-    })
+    // request('/users/nothing', function (error, response, body) {
+    //   console.log('---====', response)
+    //   if (!error && response.statusCode == 200) {
+    //     console.log(body) // Show the HTML for the Google homepage.
+    //   }
+    // })
   }
 })
